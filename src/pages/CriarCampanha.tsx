@@ -11,13 +11,37 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
+import { useNavigate } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { Textarea } from "@/components/ui/textarea";
+
+// Define campaign form schema
+const campaignSchema = z.object({
+  title: z.string().min(5, "Título precisa ter pelo menos 5 caracteres"),
+  description: z.string().min(20, "Descrição precisa ter pelo menos 20 caracteres"),
+  bloodType: z.string().min(1, "Selecione um tipo sanguíneo"),
+  goal: z.number().min(5, "A meta precisa ser de pelo menos 5 doadores"),
+  endDate: z.string().min(1, "Selecione uma data final"),
+  contactName: z.string().min(3, "Nome precisa ter pelo menos 3 caracteres"),
+  contactPhone: z.string().min(10, "Telefone inválido"),
+  contactEmail: z.string().email("Email inválido"),
+  hospitalName: z.string().min(3, "Nome do hospital/instituição é obrigatório"),
+  campaignImage: z.any().optional(),
+});
+
+// Type for our form data
+type CampaignFormValues = z.infer<typeof campaignSchema>;
 
 const CriarCampanha = () => {
   const { toast } = useToast();
-  const [goalValue, setGoalValue] = useState(50);
-  const [previewImage, setPreviewImage] = useState("");
+  const [goalValue, setGoalValue] = useState<number>(50);
+  const [previewImage, setPreviewImage] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const navigate = useNavigate();
 
-  const form = useForm({
+  const form = useForm<CampaignFormValues>({
+    resolver: zodResolver(campaignSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -28,13 +52,22 @@ const CriarCampanha = () => {
       contactPhone: "",
       contactEmail: "",
       hospitalName: "",
-      campaignImage: "",
+      campaignImage: undefined,
     },
   });
+
+  // Update form goal value when slider changes
+  React.useEffect(() => {
+    form.setValue("goal", goalValue);
+  }, [goalValue, form]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Update form value
+      form.setValue("campaignImage", file);
+      
+      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreviewImage(reader.result as string);
@@ -43,12 +76,35 @@ const CriarCampanha = () => {
     }
   };
 
-  const onSubmit = (data: any) => {
-    toast({
-      title: "Campanha criada com sucesso!",
-      description: "Sua campanha foi enviada para aprovação.",
-    });
-    console.log("Form data:", data);
+  const onSubmit = async (data: CampaignFormValues) => {
+    try {
+      setIsSubmitting(true);
+      
+      // Simulate API call with timeout
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      console.log("Campaign data:", data);
+      
+      // Show success message
+      toast({
+        title: "Campanha criada com sucesso!",
+        description: "Sua campanha foi enviada para aprovação e logo estará disponível.",
+      });
+      
+      // Redirect to campaigns page after success
+      setTimeout(() => {
+        navigate("/campanhas");
+      }, 2000);
+    } catch (error) {
+      console.error("Error creating campaign:", error);
+      toast({
+        title: "Erro ao criar campanha",
+        description: "Houve um problema ao processar sua solicitação. Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -77,7 +133,7 @@ const CriarCampanha = () => {
                       <FormItem>
                         <FormLabel>Título da Campanha*</FormLabel>
                         <FormControl>
-                          <Input placeholder="Ex: Campanha urgente para João Silva" {...field} required />
+                          <Input placeholder="Ex: Campanha urgente para João Silva" {...field} />
                         </FormControl>
                         <FormDescription>
                           Escolha um título claro e objetivo para sua campanha.
@@ -94,11 +150,10 @@ const CriarCampanha = () => {
                       <FormItem>
                         <FormLabel>Descrição*</FormLabel>
                         <FormControl>
-                          <textarea 
-                            className="w-full min-h-[120px] p-3 border rounded-md" 
+                          <Textarea 
+                            className="w-full min-h-[120px]" 
                             placeholder="Descreva o objetivo da campanha, quem será beneficiado e por que as doações são necessárias."
                             {...field}
-                            required
                           />
                         </FormControl>
                         <FormDescription>
@@ -120,7 +175,6 @@ const CriarCampanha = () => {
                             <select 
                               className="w-full p-2 border rounded-md" 
                               {...field}
-                              required
                             >
                               <option value="">Selecione um tipo</option>
                               <option value="A+">A+</option>
@@ -146,7 +200,7 @@ const CriarCampanha = () => {
                         <FormItem>
                           <FormLabel>Data Final*</FormLabel>
                           <FormControl>
-                            <Input type="date" {...field} required />
+                            <Input type="date" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -154,24 +208,31 @@ const CriarCampanha = () => {
                     />
                   </div>
 
-                  <FormItem>
-                    <FormLabel>Meta de Doadores: {goalValue}</FormLabel>
-                    <div className="pt-4 pb-2">
-                      <Slider 
-                        defaultValue={[goalValue]} 
-                        min={5} 
-                        max={500}
-                        step={5}
-                        onValueChange={(value) => setGoalValue(value[0])}
-                      />
-                    </div>
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>5</span>
-                      <span>100</span>
-                      <span>250</span>
-                      <span>500</span>
-                    </div>
-                  </FormItem>
+                  <FormField
+                    control={form.control}
+                    name="goal"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Meta de Doadores: {goalValue}</FormLabel>
+                        <div className="pt-4 pb-2">
+                          <Slider 
+                            defaultValue={[goalValue]} 
+                            min={5} 
+                            max={500}
+                            step={5}
+                            onValueChange={(value) => setGoalValue(value[0])}
+                          />
+                        </div>
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>5</span>
+                          <span>100</span>
+                          <span>250</span>
+                          <span>500</span>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <FormField
                     control={form.control}
@@ -185,10 +246,7 @@ const CriarCampanha = () => {
                               id="campaignImage" 
                               type="file" 
                               accept="image/*"
-                              onChange={(e) => {
-                                handleImageChange(e);
-                                onChange(e.target.files?.[0]);
-                              }}
+                              onChange={handleImageChange}
                               {...fieldProps}
                             />
                             {previewImage && (
@@ -221,7 +279,7 @@ const CriarCampanha = () => {
                           <FormItem>
                             <FormLabel>Nome do Responsável*</FormLabel>
                             <FormControl>
-                              <Input placeholder="Nome completo" {...field} required />
+                              <Input placeholder="Nome completo" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -235,7 +293,7 @@ const CriarCampanha = () => {
                           <FormItem>
                             <FormLabel>Telefone*</FormLabel>
                             <FormControl>
-                              <Input placeholder="(00) 00000-0000" {...field} required />
+                              <Input placeholder="(00) 00000-0000" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -251,7 +309,7 @@ const CriarCampanha = () => {
                           <FormItem>
                             <FormLabel>Email*</FormLabel>
                             <FormControl>
-                              <Input type="email" placeholder="seu@email.com" {...field} required />
+                              <Input type="email" placeholder="seu@email.com" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -265,7 +323,7 @@ const CriarCampanha = () => {
                           <FormItem>
                             <FormLabel>Hospital/Instituição*</FormLabel>
                             <FormControl>
-                              <Input placeholder="Nome da instituição" {...field} required />
+                              <Input placeholder="Nome da instituição" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -295,9 +353,31 @@ const CriarCampanha = () => {
                     </div>
                   </div>
 
-                  <CardFooter className="flex justify-end gap-4 px-0">
-                    <Button type="button" variant="outline">Cancelar</Button>
-                    <Button type="submit" className="bg-sangue-600 hover:bg-sangue-700">Criar Campanha</Button>
+                  <CardFooter className="flex justify-end gap-4 px-0 pt-4">
+                    <Button 
+                      type="button" 
+                      variant="outline"
+                      onClick={() => navigate("/campanhas")}
+                    >
+                      Cancelar
+                    </Button>
+                    <Button 
+                      type="submit" 
+                      className="bg-sangue-600 hover:bg-sangue-700"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Criando...
+                        </>
+                      ) : (
+                        "Criar Campanha"
+                      )}
+                    </Button>
                   </CardFooter>
                 </form>
               </Form>
