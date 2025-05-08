@@ -23,7 +23,6 @@ const Header = () => {
           <Link to="/" className="text-sm font-medium hover:text-sangue-600 transition-colors">Home</Link>
           <Link to="/sobre" className="text-sm font-medium hover:text-sangue-600 transition-colors">Sobre</Link>
           <Link to="/campanhas" className="text-sm font-medium hover:text-sangue-600 transition-colors">Campanhas</Link>
-          <Link to="/locais" className="text-sm font-medium hover:text-sangue-600 transition-colors">Locais de Doação</Link>
           <Link to="/contato" className="text-sm font-medium hover:text-sangue-600 transition-colors">Contato</Link>
           {mockUser.isAdmin && (
             <Link to="/admin" className="text-sm font-medium text-sangue-600 hover:text-sangue-700 transition-colors">
@@ -32,8 +31,12 @@ const Header = () => {
           )}
         </nav>
         <div className="flex items-center gap-4">
-          <Button variant="outline" className="hidden sm:flex">Entrar</Button>
-          <Button className="hidden sm:flex bg-sangue-600 hover:bg-sangue-700">Cadastrar</Button>
+          <Link to="/login">
+            <Button variant="outline" className="hidden sm:flex">Entrar</Button>
+          </Link>
+          <Link to="/cadastro">
+            <Button className="hidden sm:flex bg-sangue-600 hover:bg-sangue-700">Cadastrar</Button>
+          </Link>
           <Button variant="ghost" onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
               <line x1="4" x2="20" y1="12" y2="12" />
@@ -51,7 +54,6 @@ const Header = () => {
             <Link to="/" className="text-sm font-medium hover:text-sangue-600 transition-colors" onClick={() => setIsMenuOpen(false)}>Home</Link>
             <Link to="/sobre" className="text-sm font-medium hover:text-sangue-600 transition-colors" onClick={() => setIsMenuOpen(false)}>Sobre</Link>
             <Link to="/campanhas" className="text-sm font-medium hover:text-sangue-600 transition-colors" onClick={() => setIsMenuOpen(false)}>Campanhas</Link>
-            <Link to="/locais" className="text-sm font-medium hover:text-sangue-600 transition-colors" onClick={() => setIsMenuOpen(false)}>Locais de Doação</Link>
             <Link to="/contato" className="text-sm font-medium hover:text-sangue-600 transition-colors" onClick={() => setIsMenuOpen(false)}>Contato</Link>
             {mockUser.isAdmin && (
               <Link to="/admin" className="text-sm font-medium text-sangue-600 hover:text-sangue-700 transition-colors" onClick={() => setIsMenuOpen(false)}>
@@ -59,8 +61,12 @@ const Header = () => {
               </Link>
             )}
             <div className="flex flex-col sm:hidden space-y-2 pt-2">
-              <Button variant="outline" className="w-full">Entrar</Button>
-              <Button className="w-full bg-sangue-600 hover:bg-sangue-700">Cadastrar</Button>
+              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="outline" className="w-full">Entrar</Button>
+              </Link>
+              <Link to="/cadastro" onClick={() => setIsMenuOpen(false)}>
+                <Button className="w-full bg-sangue-600 hover:bg-sangue-700">Cadastrar</Button>
+              </Link>
             </div>
           </nav>
         </div>
