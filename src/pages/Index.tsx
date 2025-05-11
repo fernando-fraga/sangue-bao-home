@@ -144,10 +144,10 @@ const Index = () => {
                   <circle cx="12" cy="12" r="1"></circle>
                   <path d="M22 12c0 5.5-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2s10 4.5 10 10Z"></path>
                 </svg>
-                <span className="text-lg font-bold">SangueVital</span>
+                <span className="text-lg font-bold">SangueBão</span>
               </div>
               <p className="text-sm text-gray-400">
-                SangueVital é uma plataforma dedicada a conectar doadores de sangue com pessoas e instituições que necessitam de doações.
+                SangueBão é uma plataforma dedicada a conectar doadores de sangue com pessoas e instituições que necessitam de doações.
               </p>
             </div>
             <div>
@@ -166,13 +166,13 @@ const Index = () => {
                 <p>Rua das Acácias, 123</p>
                 <p>São Paulo, SP</p>
                 <p>CEP: 01000-000</p>
-                <p className="mt-2">contato@sanguevital.com.br</p>
+                <p className="mt-2">contato@sanguebao.com.br</p>
                 <p>(11) 99999-9999</p>
               </address>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-6 text-sm text-center text-gray-400">
-            <p>© {new Date().getFullYear()} SangueVital. Todos os direitos reservados.</p>
+            <p>© {new Date().getFullYear()} SangueBão. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>

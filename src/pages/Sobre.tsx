@@ -9,13 +9,13 @@ const Sobre = () => {
       <Header />
       <main className="container mx-auto py-8 px-4 flex-1">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl md:text-4xl font-bold mb-8 text-sangue-700">Sobre o SangueVital</h1>
+          <h1 className="text-3xl md:text-4xl font-bold mb-8 text-sangue-700">Sobre o SangueBão</h1>
           
           <Card className="mb-8 shadow-md">
             <CardContent className="p-6">
               <h2 className="text-2xl font-semibold mb-4 text-sangue-600">Nossa Missão</h2>
               <p className="text-gray-700 mb-4">
-                O SangueVital é uma plataforma dedicada a conectar doadores de sangue a pessoas e instituições que necessitam de doações, facilitando o processo e salvando vidas por todo o país.
+                O SangueBão é uma plataforma dedicada a conectar doadores de sangue a pessoas e instituições que necessitam de doações, facilitando o processo e salvando vidas por todo o país.
               </p>
               <p className="text-gray-700">
                 Nossa missão é aumentar o número de doadores regulares no Brasil, criando uma cultura de doação contínua e consciente, garantindo que os bancos de sangue estejam sempre abastecidos para emergências e tratamentos médicos.
@@ -27,7 +27,7 @@ const Sobre = () => {
             <CardContent className="p-6">
               <h2 className="text-2xl font-semibold mb-4 text-sangue-600">Nossa História</h2>
               <p className="text-gray-700 mb-4">
-                Fundada em 2022 por um grupo de profissionais de saúde e tecnologia, a SangueVital surgiu da necessidade de modernizar e facilitar o processo de doação de sangue no Brasil.
+                Fundada em 2022 por um grupo de profissionais de saúde e tecnologia, a SangueBão surgiu da necessidade de modernizar e facilitar o processo de doação de sangue no Brasil.
               </p>
               <p className="text-gray-700 mb-4">
                 Após observar a queda constante nas doações e os períodos críticos de escassez nos bancos de sangue, decidimos criar uma plataforma que pudesse conectar de forma eficiente os potenciais doadores às campanhas e locais de doação.
@@ -85,7 +85,7 @@ const Sobre = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a href="/contato" className="px-6 py-2 bg-sangue-600 text-white rounded-md hover:bg-sangue-700 text-center">Formulário de Contato</a>
-                <a href="mailto:contato@sanguevital.com" className="px-6 py-2 border border-sangue-600 text-sangue-600 rounded-md hover:bg-sangue-50 text-center">E-mail</a>
+                <a href="mailto:contato@sanguebao.com" className="px-6 py-2 border border-sangue-600 text-sangue-600 rounded-md hover:bg-sangue-50 text-center">E-mail</a>
               </div>
             </CardContent>
           </Card>

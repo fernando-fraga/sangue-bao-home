@@ -17,7 +17,7 @@ const Header = () => {
       <div className="container flex h-16 items-center justify-between">
         <div className="flex items-center gap-2">
           <Droplet size={30} className="text-sangue-600" />
-          <Link to="/" className="text-xl font-bold text-sangue-700">SangueVital</Link>
+          <Link to="/" className="text-xl font-bold text-sangue-700">SangueBão</Link>
         </div>
         <nav className="hidden md:flex items-center gap-6">
           <Link to="/" className="text-sm font-medium hover:text-sangue-600 transition-colors">Home</Link>
